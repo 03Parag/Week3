@@ -1,0 +1,141 @@
+package Week3.Day06;
+import java.util.*;
+// Create CompareSortingPerformance class to compare bubble sort, merge sort and quick sort
+class CompareSortingPerformance {
+
+    // Method for bubble sort
+    public static void bubbleSort(int[] arr) {
+        // Store the length of array
+        int n = arr.length;
+        boolean swap;
+        // Loop through the length of array
+        for (int i = 0; i < n - 1; i++) {
+            // Initialize the swap to false
+            swap = false;
+            // Loop through the array
+            for (int j = 0; j < n - i - 1; j++) {
+                // If element of arr[j] is greater than arr[j+1] and swap the element
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swap = true;
+                }
+            }
+            // If there is no more element to swap break the loop
+            if (!swap)
+                break;
+        }
+    }
+
+    // Method for merge sort
+    public static void mergeSort(int[] arr, int left, int right) {
+        // If left is smaller than right
+        if(left < right) {
+            int mid = left + (right - left) / 2;
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            merge(arr, left, mid, right);
+        }
+    }
+
+    // Method to merge the array
+    private static void merge(int[] arr, int left, int mid, int right) {
+        // Store valur to left and right array temporary
+        int[] leftArr = Arrays.copyOfRange(arr, left, mid + 1);
+        int[] rightArr = Arrays.copyOfRange(arr, mid + 1, right + 1);
+
+        // Initialize int to zero
+        int i = 0, j = 0, k = left;
+        // Merge element back to the merge array
+        while (i < leftArr.length && j < rightArr.length) {
+            if (leftArr[i] <= rightArr[j])
+                arr[k++] = leftArr[i++];
+            else
+                arr[k++] = rightArr[j++];
+        }
+
+        // Add any remaining element from right and left array into merge array
+        while (i < leftArr.length)
+            arr[k++] = leftArr[i++];
+        while (j < rightArr.length)
+            arr[k++] = rightArr[j++];
+    }
+
+    // Method for quick sort
+    public static void quickSort(int[] arr, int low, int high) {
+        // Check if the low is less than high
+        if (low < high) {
+            // Partition the array and get the pivot index
+            int pivotIndex = partition(arr, low,high);
+            // Sort the left and right half
+            quickSort(arr, low, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, high);
+        }
+    }
+
+    // Method for partition of quick
+    private static int partition(int[] arr, int low, int high) {
+        // Initialize the pivot to rightmost element and smaller element index
+        int pivot = arr[high];
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            // If the current element is less than or equal to the pivot
+            if (arr[j] <= pivot) {
+                i++;
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+        return i + 1;
+    }
+
+    public static void main(String[] args) {
+        // Create an array of dataset size
+        int[] datasetSizes = {1000, 10000, 1000000};
+        // Create an random object
+        Random number = new Random();
+
+        // Loop through the dataset size and store in size
+        for (int size:datasetSizes ) {
+            // Store size in data array
+            int[] data = new int[size];
+            // Loop through the size array
+            for (int i = 0; i < size; i++) {
+                data[i] = number.nextInt(10000000);
+            }
+            System.out.println("\nDataset Size: " + size);
+
+            // Measure bubble sort time
+            if (size<= 10000) {
+                int[] bubbleArr = Arrays.copyOf(data, data.length);
+                double startTimeBubble = System.nanoTime();
+                bubbleSort(bubbleArr);
+                double endTimeBubble = System.nanoTime();
+                double durationTimeBubble = (endTimeBubble - startTimeBubble) / 1000000;
+                System.out.println("\nBubble Sort: " + durationTimeBubble + "ms");
+            } else
+                System.out.println("Bubble Sort: Unfeasible (>1hr)");
+
+            // Measure merge sort time
+            int[] mergeArr = Arrays.copyOf(data, data.length);
+            double startTimeMerge = System.nanoTime();
+            mergeSort(mergeArr, 0, mergeArr.length - 1);
+            double endTimeMerge = System.nanoTime();
+            double durationTimeMerge = (endTimeMerge - startTimeMerge) / 1000000;
+            System.out.println("\nMerge Sort: " + durationTimeMerge + "ms");
+
+            //Measure quick sort time
+            int[] quickArr = Arrays.copyOf(data, data.length);
+            double startTimeQuick = System.nanoTime();
+            quickSort(quickArr, 0, quickArr.length - 1);
+            double endTimeQuick = System.nanoTime();
+            double durationTimeQuick = (endTimeQuick - startTimeQuick) / 1000000;
+            System.out.println("\nQuick Sort: " + durationTimeQuick + "ms");
+        }
+    }
+}
