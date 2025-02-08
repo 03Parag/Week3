@@ -1,0 +1,76 @@
+package Week3.Day06;
+import java.util.*;
+// Create CompareDataStructureSearching class to compare array, hashset and treeset for searching element
+class CompareDataStructureSearching {
+
+    // Method for array search
+    public static boolean searchArray(int[] arr, int target) {
+        for (int num : arr) {
+            // If the number is equal to target
+            if (num == target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Method for HashSet search
+    public static boolean searchHashSet(HashSet<Integer> set, int target) {
+        return set.contains(target);
+    }
+
+    // Method for TreeSet search
+    public static boolean searchTreeSet(TreeSet<Integer> set, int target) {
+        return set.contains(target);
+    }
+
+    public static void main(String[] args) {
+        // Create an array of datasetSizes
+        int[] datasetSizes = {1000, 100000, 1000000};
+        // Create random object
+        Random number = new Random();
+
+        // Loop through the dataset size and store in size
+        for (int size : datasetSizes) {
+            // Store size in data array
+            int[] data = new int[size];
+            // Loop through the size array
+            for (int i = 0; i < size; i++) {
+                data[i] = number.nextInt(size * 10);
+            }
+            // Take a random element as target
+            int target = data[number.nextInt(size)];
+
+            // Convert data to HashSet and TreeSet
+            HashSet<Integer> hashSet = new HashSet<>();
+            TreeSet<Integer> treeSet = new TreeSet<>();
+            for (int num : data) {
+                hashSet.add(num);
+                treeSet.add(num);
+            }
+            System.out.println("\nDataset Size: " + size);
+
+            // Measure time for Array Search (O(N))
+            double startTimeArray = System.nanoTime();
+            searchArray(data, target);
+            double endTimeArray = System.nanoTime();
+            double durationTimeArray = (endTimeArray - startTimeArray) / 1_000_000;
+            System.out.println("\nArray Search : " + durationTimeArray + " ms");
+
+            // Measure time for HashSet Search (O(1))
+            double startTimeHashSet = System.nanoTime();
+            searchHashSet(hashSet, target);
+            double endTimeHashSet = System.nanoTime();
+            double durationTimeHashSet = (endTimeHashSet - startTimeHashSet) / 1_000_000;
+            System.out.println("\nHashSet Search (O(1)): " + durationTimeHashSet + " ms");
+
+            // Measure time for TreeSet Search (O(log N))
+            double startTimeTreeSet = System.nanoTime();
+            searchTreeSet(treeSet, target);
+            double endTimeTreeSet = System.nanoTime();
+            double durationTimeTreeSet = (endTimeTreeSet - startTimeTreeSet) / 1_000_000;
+            System.out.println("\nTreeSet Search (O(log N)): " + durationTimeTreeSet + " ms");
+
+        }
+    }
+}
