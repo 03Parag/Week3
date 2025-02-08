@@ -1,0 +1,66 @@
+package Week3.Day06;
+import java.util.*;
+// Create a CompareStringPerformance class to compare string, StringBuilder and StringBuffer concatenation
+class CompareStringPerformance {
+
+    // Method for String concatenation
+    public static void concatenateString(int number) {
+        // Initialize the empty string
+        String combinedString = " ";
+        for (int i = 0; i < number; i++) {
+            combinedString += "Hello! ";
+        }
+    }
+
+    // Method for StringBuilder concatenation
+    public static void concatenateStringBuilder(int number) {
+        // Create an StringBuilder object
+        StringBuilder combinedStringBuilder = new StringBuilder(number);
+        for (int i = 0; i < number; i++) {
+            combinedStringBuilder.append("Hello! ");
+        }
+    }
+
+    // Method for StringBuffer concatenation
+    public static void concatenateStringBuffer(int number) {
+        // Create an StringBuffer object
+        StringBuffer combinedStringBuffer = new StringBuffer(number);
+        for (int i = 0; i < number; i++) {
+            combinedStringBuffer.append("Hello! ");
+        }
+    }
+
+    public static void main(String[] args) {
+        // Create an array of dataset size
+        int[] datasetSizes = {1000, 10000, 1000000};
+
+        // Loop through the dataset size and store in size
+        for (int size:datasetSizes ) {
+            System.out.println("\nDataset Size: " + size);
+
+            // Measure String concatenation time
+            double startTimeString = System.nanoTime();
+            concatenateString(size);
+            double endTimeString = System.nanoTime();
+            double durationTimeString = (endTimeString - startTimeString) / 1000000;
+            if (size > 10000) {
+                System.out.println("String: unusable");
+            } else
+                System.out.println("String: " + durationTimeString + "ms");
+
+            // Measure StringBuilder concatenation time
+            double startTimeStringBuilder = System.nanoTime();
+            concatenateStringBuilder(size);
+            double endTimeStringBuilder = System.nanoTime();
+            double durationTimeStringBuilder = (endTimeStringBuilder - startTimeStringBuilder) / 1000000;
+            System.out.println("\nStringBuilder: " + durationTimeStringBuilder + "ms");
+
+            // Measure StringBuffer concatenation time
+            double startTimeStringBuffer = System.nanoTime();
+            concatenateStringBuffer(size);
+            double endTimeStringBuffer = System.nanoTime();
+            double durationTimeStringBuffer = (endTimeStringBuffer - startTimeStringBuffer) / 1000000;
+            System.out.println("\nStringBuffer: " + durationTimeStringBuffer + "ms");
+        }
+    }
+}
