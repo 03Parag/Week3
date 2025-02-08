@@ -1,0 +1,78 @@
+package Week3.Day06;
+import java.util.*;
+// Create a CompareSearchPerformance class to compare the linear search and binary search
+class CompareSearchPerformance {
+
+    // Method for linear search
+    public static int linearSearch(int[] arr,int target) {
+        // Loop through the length of array
+        for (int i = 0; i < arr.length; i++) {
+            // If element is the target then return the index
+            if (arr[i] == target) {
+                return i;
+            }
+        }
+        // Target is not found
+        return -1;
+    }
+
+    // Method for binary search
+    public static int binarySearch(int[] arr,int target) {
+        // Initialize the left to zero
+        int left = 0, right = arr.length - 1;
+        // If left is less or equal than right
+        while (left <= right) {
+            // Calculate mid
+            int mid = left + (right - left) / 2;
+            // If mid is equal to target then return mid
+            if (arr[mid] == target) {
+                return mid;
+            // if mid is less than target then add one in mid
+            } else if (arr[mid] < target) {
+                left = mid + 1;
+            // Add one in right
+            }else {
+                right = mid - 1;
+            }
+        }
+        // Target is not found
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        // Create an array of dataset sizes
+        int[] datasetSizes = {1000, 10000, 1000000};
+        // Create an random object
+        Random number = new Random();
+
+        // Loop through the dataset size and store in size
+        for (int size:datasetSizes ) {
+            // Store size in data array
+            int[]data = new int[size];
+            // Loop through the size array
+            for (int i = 0;i < size;i++) {
+                data[i] = number.nextInt(10000000);
+            }
+            // Take a random element as target
+            int target = data[number.nextInt(size)];
+
+            // Measure linear search time
+            double startTimeLinear = System.nanoTime();
+            linearSearch(data,target);
+            double endTimeLinear = System.nanoTime();
+            double durationTimeLinear = (endTimeLinear - startTimeLinear) / 1000000;
+
+            // Sort array for binary search
+            Arrays.sort(data);
+
+            // Measure binary search time
+            double startTimeBinary = System.nanoTime();
+            binarySearch(data,target);
+            double endTimeBinary = System.nanoTime();
+            double durationTimeBinary = (endTimeBinary - startTimeBinary) / 1000000;
+
+            // Print the results
+            System.out.println("Dataset Size: " + size + "\nLinear Search: " + durationTimeLinear + "ms" + "\nBinary Search: " + durationTimeBinary + "ms");
+        }
+    }
+}
