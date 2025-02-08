@@ -1,0 +1,86 @@
+package Week3.Day06;
+import java.io.*;
+import java.util.Random;
+
+// Create CompareFileReadingEfficiency class to compare FileReader and InputStreamReader for file reading
+class CompareFileReadingEfficiency {
+
+    // Method to generate a random file
+    public static void generateRandomFile(String filePath, int sizeInMB) {
+        int bytesPerMB = 1048576; // 1MB = 1024 * 1024 bytes
+        long totalBytes = (long) sizeInMB * bytesPerMB;
+
+        try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(filePath))) {
+            Random number = new Random();
+            byte[] buffer = new byte[8192]; // 8KB buffer size
+
+            for (long written = 0; written < totalBytes; written += buffer.length) {
+                number.nextBytes(buffer);
+                outputStream.write(buffer, 0, (int) Math.min(buffer.length, totalBytes - written));
+            }
+
+            System.out.println("File generated: " + filePath + " (" + sizeInMB + "MB)");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method for FileReader
+    public static long readWithFileReader(String filePath) {
+        // Initialize the char count to zero
+        long charCount = 0;
+        // Create a buffered reader object
+        try (BufferedReader bufferedFileReader = new BufferedReader(new FileReader(filePath))) {
+            while (bufferedFileReader.read() != -1) {
+                charCount++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return charCount;
+    }
+
+    // Method for InputStreamReader
+    public static long readWithInputStreamReader(String filePath) {
+        // Initialize the char count to zero
+        long charCount = 0;
+        // Create a buffered reader object
+        try (BufferedReader bufferedInputStreamReader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)))) {
+            while (bufferedInputStreamReader.read() != -1) {
+                charCount++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return charCount;
+    }
+
+    public static void main(String[] args) {
+        // Create an array of fil
+        int[] fileSizes = {1, 100, 500};
+
+        for (int size : fileSizes) {
+            String filePath = "randomFile_" + size + "MB.txt";
+
+            // Generate a random file
+            generateRandomFile(filePath, size);
+
+            // Measure FileReader Efficiency
+            System.out.println("\nFile Size: " + size + "MB");
+            double startTimeFileReader = System.nanoTime();
+            long charCountFileReader = readWithFileReader(filePath);
+            double endTimeFileReader = System.nanoTime();
+            double durationTimeFileReader = (endTimeFileReader - startTimeFileReader) / 1000000;
+            System.out.println("FileReader Time: " +  + durationTimeFileReader + " ms");
+            System.out.println("Characters Read for FileReader: " + charCountFileReader);
+
+            // Measure InputStreamReader Efficiency
+            double startTimeInputStreamReader = System.nanoTime();
+            long charCountInputStreamReader = readWithInputStreamReader(filePath);
+            double endTimeInputStreamReader = System.nanoTime();
+            double durationTimeInputStreamReader = (endTimeInputStreamReader - startTimeInputStreamReader) / 1000000;
+            System.out.println("InputStreamReader Time: " + durationTimeInputStreamReader + " ms");
+            System.out.println("Characters Read for InputStreamReader: " + charCountInputStreamReader);
+        }
+    }
+}
