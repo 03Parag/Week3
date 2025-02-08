@@ -1,0 +1,53 @@
+package Week3.Day06;
+
+// Create a CompareFibonacciSolution class to compare recursive and iterative approach for fibonacci solutions
+class CompareFibonacciSolution {
+
+    // Method for recursive fibonacci solution
+    public static long recursiveFibonacci(int n) {
+        if (n <= 1)
+            return n;
+        return recursiveFibonacci(n - 1) + recursiveFibonacci(n - 2);
+    }
+
+    // Method for iterative fibonacci solution
+    public static long iterativeFibonacci(int n) {
+        if (n <= 1)
+            return n;
+        long a = 0, b = 1, sum = 0;
+        for (int i = 2; i <= n; i++) {
+            sum = a + b;
+            a = b;
+            b = sum;
+        }
+        return b;
+    }
+
+    public static void main(String[] args) {
+        // Create an array of number
+        int[] number = {10, 30, 50};
+
+        for (int n : number) {
+            System.out.println("\nFibonacci(" + n + "):");
+
+            // Measure Recursive Fibonacci Time
+            if (n <= 30) { // Avoid running slow recursion for large values
+                double startTimeRecursive = System.nanoTime();
+                long recursiveResult = recursiveFibonacci(n);
+                double endTimeRecursive = System.nanoTime();
+                double durationTimeRecursive = (endTimeRecursive - startTimeRecursive) / 1000000;
+                System.out.println("\nRecursive: " + recursiveResult + " \nTime: " +  + durationTimeRecursive + " ms");
+            } else {
+                System.out.println("Recursive: Unfeasible (>1hr)");
+            }
+
+            // Measure Iterative Fibonacci Time
+            double startTimeIterative = System.nanoTime();
+            long iterativeResult = iterativeFibonacci(n);
+            double endTimeIterative = System.nanoTime();
+            double durationTimeIterative = (endTimeIterative - startTimeIterative) / 1000000;
+            System.out.println("\nIterative: " + iterativeResult + " \nTime: " + durationTimeIterative + " ms");
+
+        }
+    }
+}
